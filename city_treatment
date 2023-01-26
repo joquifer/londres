@@ -1,0 +1,27 @@
+--Ver el coste y los leads por ciudad y fecha--
+
+SELECT 
+  treatment, 
+  treatment_area, 
+  SUM(cost) as cost_bcn, 
+  SUM(leads) as leads_bcn
+FROM 
+  (
+    SELECT 
+      * 
+    FROM  `ga4-clondres.datastudio.t_ds_google` 
+    WHERE city ="Barcelona" 
+    )
+JOIN 
+  (
+    SELECT 
+      city, 
+      SUM(cost), 
+      SUM (leads) 
+    FROM `ga4-clondres.datastudio.t_ds_google`  
+    GROUP BY city
+    ) 
+USING (city)
+WHERE date="2023-01-25"
+GROUP BY 1,2
+ORDER BY treatment ASC
